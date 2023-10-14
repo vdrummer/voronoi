@@ -4,12 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define IMG_WIDTH 800
-#define IMG_HEIGHT 600
-#define OUTPUT_FILE_PATH "/tmp/voronoi.ppm"
-
-#define NUM_SEEDS 10
-#define SEED_RADIUS 5
+#include "config.h"
 
 #define COLOR_RED   0xff0000ff
 #define COLOR_WHITE 0xffffffff
@@ -143,7 +138,10 @@ int main() {
   generateRandomSeeds();
 
   renderVoronoi();
+
+#ifdef DRAW_SEEDS
   renderSeeds();
+#endif
 
   writeImageAsPpm(OUTPUT_FILE_PATH);
 
