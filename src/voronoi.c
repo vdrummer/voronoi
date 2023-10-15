@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "config.h"
+#include "hsl.h"
 
 #define COLOR_RED   0xff0000ff
 #define COLOR_WHITE 0xffffffff
@@ -86,11 +87,7 @@ void renderCircle(int cx, int cy, int radius, Color color) {
   }
 }
 
-Color randomColor() {
-  uint8_t r = rand() % 255;
-  uint8_t g = rand() % 255;
-  uint8_t b = rand() % 255;
-
+Color colorFromRgb(int r, int g, int b) {
   uint32_t color = 0;
   color += 0xff000000;
   color += r << 8 * 0;
@@ -98,6 +95,34 @@ Color randomColor() {
   color += g << 8 * 2;
 
   return color;
+}
+
+float randomFloat() {
+  return (float) rand() / (float) RAND_MAX;
+}
+
+float randomFloatAround(float center, float dist) {
+  float d = randomFloat() * dist;
+  d = random() % 2 == 0 ? d : -1.0 * d;
+
+  float result = center;
+  result += d;
+
+  if (result > 1) result = 1;
+  if (result < 0) result = 0;
+
+  return result;
+}
+
+Color randomColorFromHue(float h) {
+  ColorHsl hsl = {
+    .h = randomFloatAround(h, 0.05),
+    .s = randomFloatAround(0.3, 0.2),
+    .l = randomFloatAround(0.5, 0.2)
+  };
+
+  ColorRgb rgb = hsl_HslToRgb(hsl);
+  return colorFromRgb(rgb.r, rgb.g, rgb.b);
 }
 
 void renderSeeds() {
@@ -125,8 +150,9 @@ void renderVoronoi() {
 }
 
 void initPalette() {
+  float hue = randomFloat();
   for (int i = 0; i < NUM_SEEDS; i++) {
-    palette[i] = randomColor();
+    palette[i] = randomColorFromHue(hue);
   }
 }
 
