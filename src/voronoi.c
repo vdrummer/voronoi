@@ -11,8 +11,6 @@
 #define COLOR_WHITE 0xffffffff
 #define COLOR_BLACK 0xff000000
 
-#define GOLDEN_RATIO_CONJUGATE 0.618033988749895
-
 typedef uint32_t Color;
 
 typedef struct {
@@ -127,52 +125,13 @@ void renderVoronoi() {
   }
 }
 
-Color HSVtoRGB(float H, float S,float V){
-    float s = S/100;
-    float v = V/100;
-    float C = s*v;
-    float X = C*(1-fabs(fmod(H/60.0, 2)-1));
-    float m = v-C;
-    float r,g,b;
-    if(H >= 0 && H < 60){
-        r = C,g = X,b = 0;
-    }
-    else if(H >= 60 && H < 120){
-        r = X,g = C,b = 0;
-    }
-    else if(H >= 120 && H < 180){
-        r = 0,g = C,b = X;
-    }
-    else if(H >= 180 && H < 240){
-        r = 0,g = X,b = C;
-    }
-    else if(H >= 240 && H < 300){
-        r = X,g = 0,b = C;
-    }
-    else{
-        r = C,g = 0,b = X;
-    }
-    int R = (r+m)*255;
-    int G = (g+m)*255;
-    int B = (b+m)*255;
-
-    uint32_t color = 0;
-    color += 0xff000000;
-    color += R << 8 * 0;
-    color += B << 8 * 1;
-    color += G << 8 * 2;
-
-  return color;
-}
-
 void initPalette() {
   int h = rand() % 360;
   const double s = 50;
   const double v = 95;
 
   for (int i = 0; i < NUM_SEEDS; i++) {
-    palette[i] = HSVtoRGB(h, s, v);
-    h = rand() % 360;
+    palette[i] = randomColor();
   }
 }
 
