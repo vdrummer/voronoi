@@ -68,6 +68,7 @@ int dist(int x0, int y0, int x1, int y1) {
   return dx * dx + dy * dy;
 }
 
+#ifdef DRAW_SEEDS
 void renderCircle(int cx, int cy, int radius, Color color) {
   int x0 = cx - radius;
   int y0 = cy - radius;
@@ -86,6 +87,7 @@ void renderCircle(int cx, int cy, int radius, Color color) {
     }
   }
 }
+#endif
 
 Color colorFromRgb(int r, int g, int b) {
   uint32_t color = 0;
@@ -125,11 +127,13 @@ Color randomColorFromHue(float h) {
   return colorFromRgb(rgb.r, rgb.g, rgb.b);
 }
 
+#ifdef DRAW_SEEDS
 void renderSeeds() {
   for (int i = 0; i < NUM_SEEDS; i++) {
     renderCircle(seeds[i].x, seeds[i].y, SEED_RADIUS, COLOR_WHITE);
   }
 }
+#endif
 
 void renderVoronoi() {
   for (int y = 0; y < IMG_HEIGHT; y++) {
